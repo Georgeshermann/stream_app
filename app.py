@@ -5,7 +5,7 @@ import numpy as np
 st.title("Calcul ta rentabilité by Georges👋")
 st.markdown("Ceci est un outil pour t'aider à calculer les dépenses et la rentabilité de ton achat immobilier.")
 
-st.markdown("---")
+st.markdown("-----------------------------------------")
 st.subheader("💡 Estime ta capacité d'emprunt")
 
 revenu_mensuel = st.number_input("Ton revenu net mensuel (avant impôts)", value=0, step=100)
@@ -14,14 +14,25 @@ if revenu_mensuel > 0:
     st.write(f"👉 Ta capacité d'emprunt **maximale estimée** est de : **{capacite_emprunt:,.2f} €** par mois")
     st.caption("💬 Calcul basé sur la règle des 35% d'endettement maximum")
 
+st.markdown("-----------------------------------------")
 col1, col2 = st.columns(2)
 with col1:
     prix_appt    = st.number_input("Prix appartement", value=200000, step=10000)
-    frais_agence = st.number_input("Frais d'agence (opt.)", value=0, step=1000)
+    mode_agence = st.radio("Frais d'agence en % ou €", ["En €", "En %"], horizontal=True, key="mode_agence")
+    if mode_agence == "En %":
+        frais_agence_pct = st.number_input("Frais d'agence (%)", value=0, step=1)
+        frais_agence = prix_appt * (frais_agence_pct / 100)
+    else:
+        frais_agence = st.number_input("Frais d'agence (€)", value=0, step=500)
     frais_banc   = st.number_input("Frais bancaires/dossiers", value=0, step=1000)
     apport       = st.number_input("Apport perso", value=0, step=1000)
 with col2:
-    frais_notaire  = st.number_input("Frais notaire", value=0, step=1000)
+    mode_notaire = st.radio("Frais notaire en % ou €", ["En €", "En %"], horizontal=True, key="mode_notaire")
+    if mode_notaire == "En %":
+        frais_notaire_pct = st.number_input("Frais de notaire (%)", value=0, step=1)
+        frais_notaire = prix_appt * (frais_notaire_pct / 100)
+    else:
+        frais_notaire = st.number_input("Frais de notaire (€)", value=0, step=500)
     travaux        = st.number_input("Travaux (inclus prêt)", value=0, step=1000)
     frais_courtier = st.number_input("Frais courtier", value=0, step=1000)
 
@@ -46,7 +57,6 @@ mens_with_ass      = mens_princ_interet + mens_assurance
 
 st.write(f"#### 💸 Mensualité sans assurance: {mens_princ_interet:,.2f}€")
 st.write(f"#### 🛡️ Mensualité avec assurance: {mens_with_ass:,.2f}€")
-
 
 # Loyer et charges de co-propriété
 loyer          = st.number_input("Loyer (par mois), si mise en location", value=0, step=50)
@@ -76,4 +86,4 @@ if loyer > 0:
         st.write("*(Rentabilité cashflow = Cashflow mensuel ÷ Apport perso x100)*")
         st.write("_Les charges de copropriété sont exclues du cashflow (récupérables auprès du locataire)._")
 
-st.write("## Bon Achat ✅!")
+st.write("## C'est fini!")
