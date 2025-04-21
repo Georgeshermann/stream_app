@@ -3,7 +3,16 @@ import numpy as np
 
 
 st.title("Calcul ta rentabilité by Georges👋")
-st.markdown("Ceci est un outil pour t’aider à calculer les dépenses et la rentabilité de ton achat immobilier.")
+st.markdown("Ceci est un outil pour t'aider à calculer les dépenses et la rentabilité de ton achat immobilier.")
+
+st.markdown("---")
+st.subheader("💡 Estime ta capacité d'emprunt")
+
+revenu_mensuel = st.number_input("Ton revenu net mensuel (avant impôts)", value=0, step=100)
+if revenu_mensuel > 0:
+    capacite_emprunt = revenu_mensuel * 0.35
+    st.write(f"👉 Ta capacité d'emprunt **maximale estimée** est de : **{capacite_emprunt:,.2f} €** par mois")
+    st.caption("💬 Calcul basé sur la règle des 35% d'endettement maximum")
 
 col1, col2 = st.columns(2)
 with col1:
@@ -17,7 +26,7 @@ with col2:
     frais_courtier = st.number_input("Frais courtier", value=0, step=1000)
 
 # montant total du prêt
-total_pret = prix_appt + frais_agence + frais_banc + frais_notaire + frais_courtier + travaux
+total_pret = prix_appt + frais_agence + frais_banc + frais_notaire + frais_courtier + travaux - apport
 st.write(f"#### 💰 Montant total du prêt: {total_pret:,.2f}€ 💰")
 
 taux_pret = st.number_input("Taux du prêt bancaire (%)", value=4.65, step=0.01) / 100
