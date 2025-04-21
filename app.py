@@ -8,7 +8,7 @@ st.markdown("Ceci est un outil pour t’aider à calculer les dépenses et la re
 col1, col2 = st.columns(2)
 with col1:
     prix_appt    = st.number_input("Prix appartement", value=200000, step=10000)
-    frais_agence = st.number_input("Frais d'agence (opt.)", value=0.0, step=1000.0)
+    frais_agence = st.number_input("Frais d'agence (opt.)", value=0, step=1000)
     frais_banc   = st.number_input("Frais bancaires/dossiers", value=0, step=1000)
     apport       = st.number_input("Apport perso", value=0, step=1000)
 with col2:
@@ -61,10 +61,10 @@ if loyer > 0:
     st.write("Cashflow = loyer - (mensualités du prêt avec assurance + taxes foncières)")
     st.write(f"#### 💵 Cashflow mensuel: {cashflow:,.2f}€")
 
-if apport > 0:
-    rentab = (cashflow / apport) * 100
-    st.write(f"#### 📈 Rentabilité: {rentab:,.2f}%")
-    st.write("*(Rentabilité cashflow = Cashflow mensuel ÷ Apport perso x100)*")
-    st.write("_Les charges de copropriété sont exclues du cashflow (récupérables auprès du locataire)._")
+    if apport > 0 and cashflow is not None:
+        rentab = (cashflow / apport) * 100
+        st.write(f"#### 📈 Rentabilité: {rentab:,.2f}%")
+        st.write("*(Rentabilité cashflow = Cashflow mensuel ÷ Apport perso x100)*")
+        st.write("_Les charges de copropriété sont exclues du cashflow (récupérables auprès du locataire)._")
 
 st.write("## Bon Achat ✅!")
