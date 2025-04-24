@@ -2,11 +2,11 @@ import streamlit as st
 import numpy as np
 
 
-st.title("Calcul ta rentabilité by Georges👋")
-st.markdown("Ceci est un outil pour t'aider à calculer les dépenses et la rentabilité de ton achat immobilier.")
+st.title("A Combien revient un achat immobilier ? Georges 👋")
+st.markdown("Ceci est un outil t'aide à calculer les dépenses liées à ton achat immobilier.")
 
 st.markdown("-----------------------------------------")
-st.subheader("💡 Estime ta capacité d'emprunt")
+st.subheader("1. Ta capacité d'emprunt")
 
 revenu_mensuel = st.number_input("Ton revenu net mensuel (avant impôts)", value=0, step=100)
 if revenu_mensuel > 0:
@@ -14,7 +14,14 @@ if revenu_mensuel > 0:
     st.write(f"👉 Ta capacité d'emprunt **maximale estimée** est de : **{capacite_emprunt:,.2f} €** par mois")
     st.caption("💬 Calcul basé sur la règle des 35% d'endettement maximum")
 
+
+
+
+# --------------------------------------------------------------------------------- 
 st.markdown("-----------------------------------------")
+st.subheader("2. Le montant total à emprunter")
+
+# Evaluation du montant de prêt
 col1, col2 = st.columns(2)
 with col1:
     prix_appt    = st.number_input("Prix appartement", value=200000, step=10000)
@@ -38,8 +45,15 @@ with col2:
 
 # montant total du prêt
 total_pret = prix_appt + frais_agence + frais_banc + frais_notaire + frais_courtier + travaux - apport
-st.write(f"#### 💰 Montant total du prêt: {total_pret:,.2f}€ 💰")
+st.write(f"#### Montant total du prêt")
+st.write(f"💰 {total_pret:,.2f}€ 💰")
 
+
+
+
+# ---------------------------------------------------------------------------------
+st.markdown("-----------------------------------------")
+st.write(f"### 3. Les mensualités du prêt")
 taux_pret = st.number_input("Taux du prêt bancaire (%)", value=4.65, step=0.01) / 100
 taux_ass  = st.number_input("Taux assurance prêt (%)", value=0.22, step=0.01) / 100
 duree_annees = st.number_input("Durée du prêt (années)", value=25, step=1)
@@ -55,30 +69,44 @@ mens_princ_interet = pmt(taux_pret/12, duree_mois, total_pret)
 mens_assurance     = total_pret * taux_ass / 12
 mens_with_ass      = mens_princ_interet + mens_assurance
 
-st.write(f"#### 💸 Mensualité sans assurance: {mens_princ_interet:,.2f}€")
-st.write(f"#### 🛡️ Mensualité avec assurance: {mens_with_ass:,.2f}€")
+st.write(f"#### Mensualité sans assurance:")
+st.write(f"💰 {mens_princ_interet:,.2f}€ 💰")
+st.write(f"#### Mensualité avec assurance:")
+st.write(f"💰 {mens_with_ass:,.2f}€ 💰")
 
-# Loyer et charges de co-propriété
-loyer          = st.number_input("Loyer (par mois), si mise en location", value=0, step=50)
-charges_copro  = st.number_input("Charge de copropriété (annuel)", value=1000, step=100)
+
+
+
+# ---------------------------------------------------------------------------------
+st.markdown("-----------------------------------------")
+st.write(f"### 4. Le coût mensuel (charges incluses)")
+# charges de co-propriété et taxes
+charges_copro  = st.number_input("Charges de copropriété / an", value=1000, step=100)
 charge_copro_mens = charges_copro / 12
-st.write(f"Charges de copropriété mensuelles: {charge_copro_mens:,.2f} €")
+st.write(f"Soit {charge_copro_mens:,.2f}€ / mois")
 
 # Taxe foncière
-taxe_foncieres = st.number_input("Taxe foncière (annuelle)", value=1200, step=100)
+taxe_foncieres = st.number_input("Taxe foncière / an", value=1200, step=100)
 taxe_foncieres_mens   = taxe_foncieres / 12
-st.write(f"Taxe foncière (mensuelle): {charge_copro_mens:,.2f} €")
+st.write(f"Soit {charge_copro_mens:,.2f}€ / mois")
 
 # Total dépense mensuelles
 depenses_mens = mens_with_ass + charge_copro_mens + taxe_foncieres_mens
-st.write(f"### 🏦 Dépenses / mois")  
-st.write(f"mensualités prêt + charges copro + taxes foncière")
-st.write(f"### 💰 {depenses_mens:,.2f}€ 💰")
+st.write(f"#### Mensualités prêt + Charges copro + Taxe foncière")
+st.write(f"💰 {depenses_mens:,.2f}€ 💰")
 
+
+
+
+# ---------------------------------------------------------------------------------
+st.markdown("-----------------------------------------")
+st.subheader("5. Si mises en location")
+loyer = st.number_input("Loyer (par mois), si mise en location", value=0, step=50)
 if loyer > 0:
     cashflow = loyer - (mens_with_ass + taxe_foncieres_mens)
     st.write("Cashflow = loyer - (mensualités du prêt avec assurance + taxes foncières)")
-    st.write(f"#### 💵 Cashflow mensuel: {cashflow:,.2f}€")
+    st.write(f"#### 💵 Cashflow mensuel")
+    st.write(f": {cashflow:,.2f}€")
 
     if apport > 0 and cashflow is not None:
         rentab = (cashflow / apport) * 100
