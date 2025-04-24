@@ -114,4 +114,6 @@ if loyer > 0:
         st.write("*(Rentabilité cashflow = Cashflow mensuel ÷ Apport perso x100)*")
         st.write("_Les charges de copropriété sont exclues du cashflow (récupérables auprès du locataire)._")
 
-st.write("#### 🥳🎈 Bravooo 🥳🎈")
+# ---------------------------------------------------------------------------------
+st.markdown("-----------------------------------------")
+st.subheader("🥳🎈 Bravooo 🥳🎈")
